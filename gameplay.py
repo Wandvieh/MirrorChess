@@ -6,15 +6,18 @@ WIDTH = 100
 dimensions = str(COLUMNS*WIDTH) + "x" + str(ROWS*WIDTH*2)
 MOVES = 32
 
-ws = Tk()
-ws.geometry(dimensions)
+root = Tk()
+root.geometry(dimensions)
+
+scrollbar = Scrollbar(root)
+scrollbar.pack(side=RIGHT, fill=Y)
 
 Label(text="Mirror Chess", font=('Times New Roman', 40)).pack()
 
-canvas = Canvas(ws, width=COLUMNS*WIDTH, height=ROWS*WIDTH, bg="white")
+canvas = Canvas(root, width=COLUMNS*WIDTH, height=ROWS*WIDTH, bg="white")
 canvas.pack(side="top")
 
-# Spiel intialiisieren: leeres Spielbrett, zwei Spieler mit allen Spielfiguren und keinen geshcalgenen Figuren
+# Spiel intialiisieren: leeres Spielbrett, zwei Spieler mit allen Spielfiguren und keinen geschlagenen Figuren
 human_player = {"Figuren": {
     "Bauer": 8, "Turm": 2, "Springer": 2, "Läufer": 2, "Dame": 1, "König": 1
 },
@@ -72,13 +75,15 @@ def tally_points(placement):
 last_move = "Bauer"
 for i in range(MOVES):
     # Figur setzen
-    if i%2==0:
+    if i%2==0: # PC
         piece = pc_move(pc_player, last_move)
         curr_placement[i%2][int(i/2)]=[piece, "PC"]
-    else:
+        #txt = "Der PC hat " + piece + " gesetzt."
+    else: # Spieler
         piece = player_move(human_player)
         last_move = piece
         curr_placement[i%2][int(i/2)]=[piece, "Spieler"]
+        #txt = "Du hast " + piece + " gesetzt."
     print(curr_placement)
     # Spielfeld zeigen
     show_field(curr_placement)
@@ -86,9 +91,10 @@ for i in range(MOVES):
     #if i%2==0: curr_placement = pc_strike(curr_placement)
     #else: curr_placement = player_strike(curr_placement)
 points = tally_points(curr_placement)
+
 print("Du hast ", points, "erhalten!")
 
 
-ws.mainloop()
+root.mainloop()
 
 
