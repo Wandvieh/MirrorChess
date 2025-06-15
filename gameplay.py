@@ -1,22 +1,8 @@
 from tkinter import *
-import time
+from GUI import *
+from capturing import player_strike, pc_strike, check_movable_pieces, decide_active_piece
 
-ROWS = 2
-COLUMNS = 16
-WIDTH = 100
-dimensions = str(COLUMNS*WIDTH) + "x" + str(ROWS*WIDTH*2)
 MOVES = 32
-
-root = Tk()
-root.geometry(dimensions)
-
-scrollbar = Scrollbar(root)
-scrollbar.pack(side=RIGHT, fill=Y)
-
-Label(text="Mirror Chess", font=('Times New Roman', 40)).pack()
-
-canvas = Canvas(root, width=COLUMNS*WIDTH, height=ROWS*WIDTH, bg="white")
-canvas.pack(side="top")
 
 # Spiel intialiisieren: leeres Spielbrett, zwei Spieler mit allen Spielfiguren und keinen geschlagenen Figuren
 human_player = {"Figuren": {
@@ -28,20 +14,7 @@ pc_player = {"Figuren": {
 },
              "Punkte": 0}
 
-curr_placement = [[""]*16, [""]*16]
-
-def show_field(placement):
-    for i in range(ROWS):
-        y = i * WIDTH
-        for j in range(COLUMNS):
-            x = j * WIDTH
-            canvas.create_rectangle(x, y, x+WIDTH, y+WIDTH, fill="white")
-            if (placement[i][j]):
-                if placement[i][j][1] == "PC": color = "blue"
-                else: color = "green"
-                canvas.create_text(x + 50, y + 50,fill=color,
-                                text=placement[i][j][0], font=('Times New Roman', 20))
-    return
+placement = [[""]*16, [""]*16]
 
 # Züge: PC startet, nacheinenander, 32 Züge; Setz- und Schlagphase
 
@@ -70,229 +43,7 @@ def tally_points(placement):
             if placement[i][j]:
                 if placement[i][j][1] == "Spieler": player_points += 1
                 if placement[i][j][1] == "PC": pc_points += 1  
-    return pc_points - player_points
-
-def possible_hits(placement, piece, row_pos, column_pos, player):
-    hits = {}
-    # structure: every possible hit is a dict entry with "(x,y): [Figur, Spieler]", (x,y) being the coordinate of the Figur that can be striked
-    if piece == "Bauer": # kann nur nach unten oder oben, nach links oder rechts
-        if row_pos == 0 and player == 'PC': # PC, Bauer steht oben
-            try:
-                if placement[row_pos+1][column_pos-1][1] != player and column_pos-1 >= 0:
-                    hits[(row_pos+1, column_pos-1)] = placement[row_pos+1][column_pos-1]
-            except:
-                pass
-            try:
-                if placement[row_pos+1][column_pos+1][1] != player:
-                    hits[(row_pos+1, column_pos+1)] = placement[row_pos+1][column_pos+1]
-            except:
-                pass
-        if row_pos == 1 and player == 'Spieler': # Spieler, Bauer steht unten
-            try:
-                if placement[row_pos-1][column_pos-1][1] != player and column_pos-1 >= 0:
-                    hits[(row_pos-1, column_pos-1)] = placement[row_pos-1][column_pos-1]
-            except:
-                pass
-            try:
-                if placement[row_pos-1][column_pos+1][1] != player:
-                    hits[(row_pos-1, column_pos+1)] = placement[row_pos-1][column_pos+1]
-            except:
-                pass
-    elif piece == "Turm": # kann in vier Richtungen gerade
-        try:
-            if placement[row_pos][column_pos-1][1] != player and column_pos-1 >= 0:
-                hits[(row_pos, column_pos-1)] = placement[row_pos][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos][column_pos+1][1] != player:
-                hits[(row_pos, column_pos+1)] = placement[row_pos][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos-1][column_pos][1] != player and row_pos-1 >= 0:
-                hits[(row_pos-1, column_pos)] = placement[row_pos-1][column_pos]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos][1] != player:
-                hits[(row_pos+1, column_pos)] = placement[row_pos+1][column_pos]
-        except:
-            pass
-    elif piece == "Läufer": # kann in vier Richtungen diagonal
-        try:
-            if placement[row_pos-1][column_pos-1][1] != player and row_pos-1 >= 0 and column_pos-1 >= 0:
-                hits[(row_pos-1, column_pos-1)] = placement[row_pos-1][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos-1][column_pos+1][1] != player and row_pos-1 >= 0:
-                hits[(row_pos-1, column_pos+1)] = placement[row_pos-1][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos-1][1] != player and column_pos-1 >= 0:
-                hits[(row_pos+1, column_pos-1)] = placement[row_pos+1][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos+1][1] != player:
-                hits[(row_pos+1, column_pos+1)] = placement[row_pos+1][column_pos+1]
-        except:
-            pass
-    elif piece == "Springer": # kann... kompliziert
-        try:
-            if placement[row_pos-1][column_pos-2][1] != player and row_pos-1 >= 0 and column_pos-2 >= 0:
-                hits[(row_pos-1, column_pos-2)] = placement[row_pos-1][column_pos-2]
-        except:
-            pass
-        try:
-            if placement[row_pos-1][column_pos+2][1] != player and row_pos-1 >= 0:
-                hits[(row_pos-1, column_pos+2)] = placement[row_pos-1][column_pos+2]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos-2][1] != player and column_pos-2 >= 0:
-                hits[(row_pos+1, column_pos-2)] = placement[row_pos+1][column_pos-2]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos+2][1] != player:
-                hits[(row_pos+1, column_pos+2)] = placement[row_pos+1][column_pos+2]
-        except:
-            pass
-    elif piece == "Dame": # kann in jede Richtung
-        try:
-            if placement[row_pos-1][column_pos-1][1] != player and row_pos-1 >= 0 and column_pos-1 >= 0:
-                hits[(row_pos-1, column_pos-1)] = placement[row_pos-1][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos-1][column_pos+1][1] != player and row_pos-1 >= 0:
-                hits[(row_pos-1, column_pos+1)] = placement[row_pos-1][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos-1][1] != player and column_pos-1 >= 0:
-                hits[(row_pos+1, column_pos-1)] = placement[row_pos+1][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos+1][1] != player:
-                hits[(row_pos+1, column_pos+1)] = placement[row_pos+1][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos][column_pos-1][1] != player and column_pos-1 >= 0:
-                hits[(row_pos, column_pos-1)] = placement[row_pos][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos][column_pos+1][1] != player:
-                hits[(row_pos, column_pos+1)] = placement[row_pos][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos-1][column_pos][1] != player and row_pos-1 >= 0:
-                hits[(row_pos-1, column_pos)] = placement[row_pos-1][column_pos]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos][1] != player:
-                hits[(row_pos+1, column_pos)] = placement[row_pos+1][column_pos]
-        except:
-            pass
-    elif piece == "König": # kann in jede Richtung
-        try:
-            if placement[row_pos-1][column_pos-1][1] != player and row_pos-1 >= 0 and column_pos-1 >= 0:
-                hits[(row_pos-1, column_pos-1)] = placement[row_pos-1][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos-1][column_pos+1][1] != player and row_pos-1 >= 0:
-                hits[(row_pos-1, column_pos+1)] = placement[row_pos-1][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos-1][1] != player and column_pos-1 >= 0:
-                hits[(row_pos+1, column_pos-1)] = placement[row_pos+1][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos+1][1] != player:
-                hits[(row_pos+1, column_pos+1)] = placement[row_pos+1][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos][column_pos-1][1] != player and column_pos-1 >= 0:
-                hits[(row_pos, column_pos-1)] = placement[row_pos][column_pos-1]
-        except:
-            pass
-        try:
-            if placement[row_pos][column_pos+1][1] != player:
-                hits[(row_pos, column_pos+1)] = placement[row_pos][column_pos+1]
-        except:
-            pass
-        try:
-            if placement[row_pos-1][column_pos][1] != player and row_pos-1 >= 0:
-                hits[(row_pos-1, column_pos)] = placement[row_pos-1][column_pos]
-        except:
-            pass
-        try:
-            if placement[row_pos+1][column_pos][1] != player:
-                hits[(row_pos+1, column_pos)] = placement[row_pos+1][column_pos]
-        except:
-            pass
-    return hits
-
-def actual_hit_pc(placement, hits:dict, piece, old_row, old_col):
-    choices = [item[0] for item in hits.values()]
-    if "König" in choices:
-        new_row, new_col = list(hits.keys())[choices.index("König")][0], list(hits.keys())[choices.index("König")][1]
-    elif "Dame" in choices:
-        new_row, new_col = list(hits.keys())[choices.index("Dame")][0], list(hits.keys())[choices.index("Dame")][1]
-    elif "Springer" in choices:
-        new_row, new_col = list(hits.keys())[choices.index("Springer")][0], list(hits.keys())[choices.index("Springer")][1]
-    elif "Turm" in choices:
-        new_row, new_col = list(hits.keys())[choices.index("Turm")][0], list(hits.keys())[choices.index("Turm")][1]
-    elif "Läufer" in choices:
-        new_row, new_col = list(hits.keys())[choices.index("Läufer")][0], list(hits.keys())[choices.index("Läufer")][1]
-    else:
-        new_row, new_col = list(hits.keys())[choices.index("Bauer")][0], list(hits.keys())[choices.index("Bauer")][1]
-    placement[new_row][new_col] = [piece, "PC"]
-    placement[old_row][old_col] = ''
-    return placement, new_row, new_col
-
-def pc_strike(placement, piece, row_pos, column_pos):
-    hits = possible_hits(placement, piece, row_pos, column_pos, 'PC')
-    print(hits)
-    if len(hits) > 0:
-        placement, new_row_pos, new_column_pos = actual_hit_pc(placement, hits, piece, row_pos, column_pos)
-        show_field(placement)
-        input("Drücke Enter, um fortzufahren")
-        placement = pc_strike(placement, piece, new_row_pos, new_column_pos)
-    return placement
-
-def actual_hit_player(placement, hits, piece, old_row, old_col):
-    print("Du kannst schlagen:", hits)
-    choices = [item[0] for item in hits.values()]
-    while True:
-        inp = input("Welche Figur schlägst du? ")
-        if inp not in choices: print("Keine valide Figur!")
-        else: break
-    new_row, new_col = list(hits.keys())[choices.index(inp)][0], list(hits.keys())[choices.index(inp)][1]
-    placement[new_row][new_col] = [piece, "Spieler"]
-    placement[old_row][old_col] = ''
-    return placement, new_row, new_col
-
-def player_strike(placement, piece, row_pos, col_pos):
-    hits = possible_hits(placement, piece, row_pos, col_pos, 'Spieler')
-    if len(hits) == 0:
-        return placement
-    placement, new_row_pos, new_col_pos = actual_hit_player(placement, hits, piece, row_pos, col_pos)
-    show_field(placement)
-    placement = player_strike(placement, piece, new_row_pos, new_col_pos)
-    return placement
+    return player_points - pc_points
 
 
 last_move = "Bauer"
@@ -300,29 +51,39 @@ for i in range(MOVES):
     # Figur setzen
     if i%2==0: # PC
         piece = pc_move(pc_player, last_move)
-        curr_placement[i%2][int(i/2)]=[piece, "PC"]
+        placement[i%2][int(i/2)]=[piece, "PC"]
         #txt = "Der PC hat " + piece + " gesetzt."
     else: # Spieler
         piece = player_move(human_player)
         last_move = piece
-        curr_placement[i%2][int(i/2)]=[piece, "Spieler"]
+        placement[i%2][int(i/2)]=[piece, "Spieler"]
         #txt = "Du hast " + piece + " gesetzt."
-    #print(curr_placement)
+    #print(placement)
     # Spielfeld zeigen
-    show_field(curr_placement)
+    show_field(placement)
     input("Drücke Enter, um fortzufahren")
     # Spielfiguren schlagen
-    if i%2==0: # PC 
-        curr_placement = pc_strike(curr_placement, piece, i%2, int(i/2))
+    if i%2==0: # PC
+        placement = pc_strike(placement, piece, i%2, int(i/2))
     else: # Spieler
-        curr_placement = player_strike(curr_placement, piece, i%2, int(i/2))
-    show_field(curr_placement)
+        # first he strikes with the current piece
+        placement = player_strike(placement, piece, i%2, int(i/2))
+        # then a loop: as long as there is something to strike, you have to choose to do so
+        while True:
+            movable_pieces, piece_positions = check_movable_pieces(placement, 'Spieler')
+            if len(movable_pieces) == 0:
+                break
+            # player decides on which piece to strike with (and where it's located)
+            piece, row, col = decide_active_piece(movable_pieces, piece_positions)
+            # player strikes like above
+            placement = player_strike(placement, piece, row, col)
+            show_field(placement)
+            input("Drücke Enter, um fortzufahren")
+    show_field(placement)
     input("Drücke Enter, um fortzufahren")
-points = tally_points(curr_placement)
+points = tally_points(placement)
 
 print("Du hast", points, "Punkte erhalten!")
 
-
-root.mainloop()
 
 

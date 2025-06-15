@@ -2,17 +2,27 @@
 The game "Mirror Chess"
 
 # To Do
-## Visuell / Grafische Oberfläche
-- [x] Spielfeld, unterschiedliche Farben für Spieler / PC
-- [ ] Texteingabe / Übersicht über eigene Figuren
 
-## Mechanik
+## v0.1
+### Visuell / Grafische Oberfläche
+- [x] Spielfeld, unterschiedliche Farben für Spieler / PC
+
+### Mechanik
 - [x] abwechselnde Runden
 - [x] Spielstart
 - [x] Punkte zählen
 - [x] Verhaltensweise der Figuren ((automatisches) Schlagen)
-- [] eigenes Schlagen
+- [x] eigenes Schlagen
 
+## v0.2
+- [x] Bugs
+  - [x] Punkte richtig zählen
+- [ ] Gameplay
+  - [x] Man kann (nach seinem Zug) auch mit seinen anderen Figuren schlagen
+  - [ ] Auch andere Figuren können schlagen
+  - [ ] Man muss nicht schlagen
+- [ ] GUI
+  - [ ] Texteingabe / Übersicht über eigene Figuren
 
 
 
