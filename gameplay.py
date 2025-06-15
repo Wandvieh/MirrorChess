@@ -67,7 +67,7 @@ for i in range(MOVES):
         placement = pc_strike(placement, piece, i%2, int(i/2))
     else: # Spieler
         # first he strikes with the current piece
-        placement = player_strike(placement, piece, i%2, int(i/2))
+        #placement = player_strike(placement, piece, i%2, int(i/2))
         # then a loop: as long as there is something to strike, you have to choose to do so
         while True:
             movable_pieces, piece_positions = check_movable_pieces(placement, 'Spieler')
@@ -75,6 +75,8 @@ for i in range(MOVES):
                 break
             # player decides on which piece to strike with (and where it's located)
             piece, row, col = decide_active_piece(movable_pieces, piece_positions)
+            if piece == 'Skip':
+                break
             # player strikes like above
             placement = player_strike(placement, piece, row, col)
             show_field(placement)

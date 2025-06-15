@@ -10,17 +10,16 @@ The game "Mirror Chess"
 ### Mechanik
 - [x] abwechselnde Runden
 - [x] Spielstart
-- [x] Punkte zählen
-- [x] Verhaltensweise der Figuren ((automatisches) Schlagen)
-- [x] eigenes Schlagen
+- [x] Punkte zählen (jeder Figur ist gleichwertig)
+- [x] PC-Schlagen
+- [x] Spieler-Schlagen
 
 ## v0.2
 - [x] Bugs
   - [x] Punkte richtig zählen
-- [ ] Gameplay
-  - [x] Man kann (nach seinem Zug) auch mit seinen anderen Figuren schlagen
-  - [ ] Auch andere Figuren können schlagen
-  - [ ] Man muss nicht schlagen
+- [x] Gameplay
+  - [x] Der Spieler kann auch mit seinen anderen Figuren schlagen (egal welche Reihenfolge)
+  - [x] Man muss nicht schlagen
 - [ ] GUI
   - [ ] Texteingabe / Übersicht über eigene Figuren
 
