@@ -10,8 +10,8 @@ The game "Mirror Chess"
 - [x] abwechselnde Runden
 - [x] Spielstart
 - [x] Punkte zählen
-- [ ] Verhaltensweise der Figuren ((automatisches) Schlagen)
-    - automatisches Schlagen debuggen: Felder indexen verhält sich nicht gut mit negativen Zahlen
+- [x] Verhaltensweise der Figuren ((automatisches) Schlagen)
+- [] eigenes Schlagen
 
 
 
