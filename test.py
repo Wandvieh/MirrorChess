@@ -5,3 +5,8 @@ print(placement[1])
 dct = {(1, 1): ['König', 'Spieler'], (2, 2): ['Bauer', 'Spieler'], (3, 3): ['Bauer', 'Spieler']}
 
 print([item[0] for item in dct.values()])
+
+ROWS = 2
+COLUMNS = 16
+
+print([[None for _ in range(COLUMNS)] for _ in range(ROWS)])

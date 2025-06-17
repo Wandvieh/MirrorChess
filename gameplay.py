@@ -1,5 +1,5 @@
 from tkinter import *
-from GUI import *
+from GUI import show_field
 from capturing import player_strike, pc_strike, check_movable_pieces, decide_active_piece
 
 MOVES = 32
@@ -16,7 +16,7 @@ pc_player = {"Figuren": {
 
 placement = [[""]*16, [""]*16]
 
-# Züge: PC startet, nacheinenander, 32 Züge; Setz- und Schlagphase
+# Züge: PC startet, nacheinander, 32 Züge; Setz- und Schlagphase
 
 def pc_move(player, last_move):
     player["Figuren"][last_move] -= 1
@@ -44,6 +44,8 @@ def tally_points(placement):
                 if placement[i][j][1] == "Spieler": player_points += 1
                 if placement[i][j][1] == "PC": pc_points += 1  
     return player_points - pc_points
+
+
 
 
 last_move = "Bauer"
