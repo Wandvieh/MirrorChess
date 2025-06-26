@@ -267,7 +267,7 @@ def decide_active_piece(movable_pieces:dict, piece_positions:dict) -> tuple [str
     print("Du kannst außerdem folgende Züge machen:", movable_pieces)
     while True:
         inp = input("Welche Figur willst du bewegen? Willst du keinen Zug tätigen, gib 'Skip' ein ")
-        if inp == 'skip': return 'Skip', 0, 0 # Zug überspringen
+        if inp == 'Skip': return 'Skip', 0, 0 # Zug überspringen
         if inp not in list(movable_pieces.keys()): print("Keine valide Figur!")
         else: break
     return inp, piece_positions[inp][0], piece_positions[inp][1]
