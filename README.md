@@ -20,8 +20,18 @@ The game "Mirror Chess"
 - [x] Gameplay
   - [x] Der Spieler kann auch mit seinen anderen Figuren schlagen (egal welche Reihenfolge)
   - [x] Man muss nicht schlagen
+  - [ ] Man kann auch bei zwei Figuren mit derselben Bezeichnung auswählen, welche man schlägt
+  - [ ] Jede Figur darf in einer Runde nur ein Mal schlagen
 - [ ] GUI
   - [ ] Texteingabe / Übersicht über eigene Figuren
+
+# Game Modes
+
+- In der Entwicklung
+  - Original Mirror Chess (GUI fehlt)
+- Ideen
+  - 3x16 Mirror Chess
+  - Schach Rogue-Like
 
 
 
