@@ -90,8 +90,10 @@ class OriginalMirrorChess(tk.Frame):
                         pass
             self.aktuelle_spalte += 1
         # nächste Phase
-        #print("Runde:", self.aktuelle_spalte, "Phase", self.spielphase)
+        print("Runde:", self.aktuelle_spalte, "Phase", self.spielphase)
+        # das folgende muss automatisch passieren, wenn der PC fertig ist oder der Spieler aus der Ablage aufs Spielfeld gezogen hat 
         self.spielphase = (self.spielphase + 1) % 3
+
     
     def end_game(self):
         punkte = print("Spielende!")
