@@ -3,6 +3,16 @@ The game "Mirror Chess"
 
 # To Do
 
+## v1.0 - An actual working prototype!
+- [x] Bugs
+  - [x] Punkte richtig zählen
+- [x] Gameplay
+  - [x] Der Spieler kann auch mit seinen anderen Figuren schlagen (egal welche Reihenfolge)
+  - [x] Man muss nicht schlagen
+  - [x] Jede Figur darf in einer Runde nur ein Mal schlagen
+- [x] GUI
+  - [x] Drag and Drop
+
 ## v0.1
 ### Visuell / Grafische Oberfläche
 - [x] Spielfeld, unterschiedliche Farben für Spieler / PC
@@ -13,16 +23,6 @@ The game "Mirror Chess"
 - [x] Punkte zählen (jeder Figur ist gleichwertig)
 - [x] PC-Schlagen
 - [x] Spieler-Schlagen
-
-## v0.2
-- [x] Bugs
-  - [x] Punkte richtig zählen
-- [x] Gameplay
-  - [x] Der Spieler kann auch mit seinen anderen Figuren schlagen (egal welche Reihenfolge)
-  - [x] Man muss nicht schlagen
-  - [ ] Jede Figur darf in einer Runde nur ein Mal schlagen
-- [ ] GUI
-  - [x] Drag and Drop
 
 # Game Modes
 
