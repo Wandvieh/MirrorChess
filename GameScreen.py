@@ -114,7 +114,6 @@ class OriginalMirrorChess(ttk.Frame):
     def pc_schlaegt(self):
         while True:
             # so lange loopen, bis der pc nicht mehr schlagen kann
-            time.sleep(1.5)
             hoechste_wertung = 0
             ergebnis = {}
             for i in range(32):
@@ -150,6 +149,7 @@ class OriginalMirrorChess(ttk.Frame):
                 # pc schlägt immer so viel er kann
                 print("pc kann nicht schlagen")
                 break
+            self.update_idletasks()
             time.sleep(1.5)
             print("pc kann schlagen")
             # Schlagen

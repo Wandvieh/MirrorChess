@@ -11,7 +11,7 @@ The game "Mirror Chess"
 - [x] QoL Improvements
   - [x] Added a "Rules" Popup
   - [x] Showing the Points on the Game Screen
-  - [ ] Seeing the PC actually move its pieces
+  - [x] Seeing the PC actually move its pieces
 - [x] Visuals
   - [x] More coherent design
   - [x] Added an Icon
