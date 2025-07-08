@@ -6,6 +6,7 @@ The game "Mirror Chess"
 ## v1.2 - Adding a new Game & Reworking the Code
 - [ ] Added new game?
 - [ ] Reworking the code (no changes, just cleaner code and smaller functions)
+- [ ] Added an icon for the task bar, added more icon resolutions
 
 ## v1.1 - Making Quality of Life Improvements
 - [x] QoL Improvements
@@ -17,7 +18,7 @@ The game "Mirror Chess"
   - [x] Added an Icon
 - [x] Bugs
   - [x] Corrected movement of Queen and King
-  - [ ] Corrected PC capturing behaviour (PC didn't capture on later moves)
+  - [x] Corrected PC capturing behaviour (PC didn't capture on later moves)
 
 ## v1.0 - An actual working prototype!
 - [x] Bugs
