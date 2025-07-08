@@ -3,6 +3,22 @@ The game "Mirror Chess"
 
 # To Do
 
+## v1.2 - Adding a new Game & Reworking the Code
+- [ ] Added new game?
+- [ ] Reworking the code (no changes, just cleaner code and smaller functions)
+
+## v1.1 - Making Quality of Life Improvements
+- [x] QoL Improvements
+  - [x] Added a "Rules" Popup
+  - [x] Showing the Points on the Game Screen
+  - [ ] Seeing the PC actually move its pieces
+- [x] Visuals
+  - [x] More coherent design
+  - [x] Added an Icon
+- [x] Bugs
+  - [x] Corrected movement of Queen and King
+  - [ ] Corrected PC capturing behaviour (PC didn't capture on later moves)
+
 ## v1.0 - An actual working prototype!
 - [x] Bugs
   - [x] Punkte richtig zählen
@@ -26,11 +42,9 @@ The game "Mirror Chess"
 
 # Game Modes
 
-- In der Entwicklung
-  - Original Mirror Chess (GUI fehlt)
-- Ideen
+- Ideas
   - 3x16 Mirror Chess
-  - Schach Rogue-Like
+  - Chess Rogue-Like
 
 
 

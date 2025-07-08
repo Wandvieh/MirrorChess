@@ -1,13 +1,13 @@
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
 from ChessPiece import figuren_erstellen, hit_possible
 import time
 
 
-class OriginalMirrorChess(tk.Frame):
+class OriginalMirrorChess(ttk.Frame):
     def __init__(self, master, return_callback):
         super().__init__(master)
-        self.grid(row=0, column=0, sticky="nsew")
+        self.grid(row=0, column=0)
 
         self.return_callback = return_callback
 
@@ -23,7 +23,7 @@ class OriginalMirrorChess(tk.Frame):
         # Wichtig: Spieler1 ist immer oben, Spieler2 ist immer unten (ist relevant für die erlaubten Züge der Bauern)
 
         self.spielfeld = [[None for _ in range(self.COLUMNS)] for _ in range(self.ROWS)]
-        self.canvas_spielfeld = tk.Canvas(self, width=self.COLUMNS*self.WIDTH, height=(self.ROWS + 2)*self.WIDTH, bg="white")
+        self.canvas_spielfeld = ttk.Canvas(self, width=self.COLUMNS*self.WIDTH, height=(self.ROWS + 2)*self.WIDTH, bg="white")
         self.canvas_spielfeld.grid(row=0)
 
         self.canvas_spielfeld.bind("<ButtonPress-1>", self.on_mouse_press_spielfeld)
@@ -35,16 +35,19 @@ class OriginalMirrorChess(tk.Frame):
 
         self.figuren_pc = figuren_erstellen(self.SPIELER1)
         self.figuren_spieler = figuren_erstellen(self.SPIELER2)
-        print(self.figuren_spieler[0].spieler, self.figuren_pc[0].spieler)
+        #print(self.figuren_spieler[0].spieler, self.figuren_pc[0].spieler)
 
         self.zeichne_brett()
         self.setze_startfiguren()
-        
-        self.back_button = tk.Button(self, text="← Spiel abbrechen", command=self.return_callback)
-        self.back_button.grid(row=2, column=0, pady=10)
 
-        continue_button = tk.Button(self, text="Weiter", command=self.next_turn)
-        continue_button.grid(row = 3)
+        self.button_frame = ttk.Frame(self, width=self.COLUMNS*self.WIDTH)
+        self.continue_button = ttk.Button(self.button_frame, text="Spiel starten", command=self.next_turn)
+        self.continue_button.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        self.back_button = ttk.Button(self.button_frame, text="← Zurück zum Menü", command=self.return_callback, style="primary.Link.TButton")
+        self.back_button.grid(row=1, column=0, sticky="NEWS", padx=10, pady=10)
+        self.back_button = ttk.Button(self.button_frame, text="Regeln", command=self.regel_popup, style="primary.Link.TButton")
+        self.back_button.grid(row=1, column=1, sticky="NEWS", padx=10, pady=10)
+        self.button_frame.grid(row=2)
 
         self.PC = 0
         self.SPIELER_SETZEN = 1
@@ -54,21 +57,43 @@ class OriginalMirrorChess(tk.Frame):
         self.aktuelle_spalte = 0
         self.zuletzt_gezogen = "♟"
 
+    def regel_popup(self):
+        with open("assets\RegelnOriginal.txt", encoding="utf-8") as f:
+            text = f.read()
+        popup = tk.Toplevel()
+        popup.wm_title("Regeln")
+        ttk.Label(popup, text=text).grid(sticky="nsew")
+        pass
+    
+    def turn_to_waiting(self, button):
+        if self.spielphase == self.PC: button.configure(text="Warten auf den Gegner...")
+        else: button.configure(text="Warten auf deinen Zug...")
+        # ausgrauen
+
+    def turn_to_active(self, button):
+        button.configure(text="Nächste Runde")
+    
+    def PCs_turn(self):
+        # PC ist dran
+        # Figur setzen, die davor gesetzt wurde
+        for i in range(16):
+            if not self.figuren_pc[i].coords and self.zuletzt_gezogen == self.figuren_pc[i].symbol:
+                figur = self.figuren_pc[i]
+                self.setze_figur(self.aktuelle_spalte, 0, figur)
+                break
+        self.pc_schlaegt()
+        #print("pf hat geschlagen")
+        self.spielphase += 1
+        self.turn_to_waiting(self.continue_button)
+
     def next_turn(self):
+        if self.continue_button['text'] == "Spiel starten":
+            self.turn_to_waiting(self.continue_button)
+            self.PCs_turn()
         if self.aktuelle_spalte == self.COLUMNS:
             # Spiel ist zu Ende
             self.end_game()
         elif self.spielphase == self.PC:
-            # PC ist dran
-            # erste Figur finden, die den Anforderungen entspricht
-            for i in range(16):
-                if not self.figuren_pc[i].coords and self.zuletzt_gezogen == self.figuren_pc[i].symbol:
-                    figur = self.figuren_pc[i]
-                    self.setze_figur(self.aktuelle_spalte, 0, figur)
-                    break
-            """ Schlagen """
-            self.pc_schlaegt()
-            self.spielphase += 1
             pass
         elif self.spielphase == self.SPIELER_SETZEN:
             pass
@@ -82,40 +107,51 @@ class OriginalMirrorChess(tk.Frame):
                         pass
             self.aktuelle_spalte += 1
             self.spielphase = (self.spielphase + 1) % 3
-        print("Runde:", self.aktuelle_spalte, "Phase", self.spielphase)
+            self.turn_to_waiting(self.continue_button)
+            self.PCs_turn()
+        #print("Runde:", self.aktuelle_spalte, "Phase", self.spielphase)
 
     def pc_schlaegt(self):
         while True:
             # so lange loopen, bis der pc nicht mehr schlagen kann
+            time.sleep(1.5)
             hoechste_wertung = 0
             ergebnis = {}
             for i in range(32):
                 alte_x = i % 16
                 alte_y = i // 16
                 if self.spielfeld[alte_y][alte_x] and self.spielfeld[alte_y][alte_x].spieler == self.SPIELER1:
+                    print("A")
                     schlagende_figur = self.spielfeld[alte_y][alte_x]
                     # jedes spielfeld durchgehen: steht hier eine weiße figur?
                     for j in range(9):
                         # jedes feld drumherum durchgehen: steht hier eine schwarze figur?
                         neue_x = j % 3
                         neue_y = j // 3
+                        print("x:", neue_x, "y:", neue_y)
                         if (neue_x < 0 or self.COLUMNS <= neue_x) or (neue_y < 0 or self.ROWS <= neue_y):
+                            print("B")
                             # kein erlaubtes spielfeld
                             continue
                         if self.spielfeld[neue_y][neue_x] and self.spielfeld[neue_y][neue_x].spieler == self.SPIELER2:
+                            print("C")
                             zu_schlagende_figur = self.spielfeld[neue_y][neue_x]
                             #ist das ein valider zug? wenn ja, der liste hinzufügen
                             if self.capturing_validity(neue_x, neue_y, schlagende_figur):
+                                print("D")
                                 aktuelle_wertung = self.spielfeld[neue_y][neue_x].wertung
                                 if aktuelle_wertung > hoechste_wertung:
+                                    print("E")
                                     hoechste_wertung = aktuelle_wertung
                                     ergebnis["Schlagende"] = schlagende_figur
                                     ergebnis["Geschlagener"] = zu_schlagende_figur
                 # ergebnis: den besten zu schlagenden wert mit hoechste_wertung und hoechste_id
             if hoechste_wertung == 0:
                 # pc schlägt immer so viel er kann
+                print("pc kann nicht schlagen")
                 break
             time.sleep(1.5)
+            print("pc kann schlagen")
             # Schlagen
             self.spielfeld[ergebnis["Geschlagener"].coords["y"]][ergebnis["Geschlagener"].coords["x"]] = None
             #self.geschlagen.append(geschlagene_figur) # nur für den Spieler
@@ -134,14 +170,16 @@ class OriginalMirrorChess(tk.Frame):
         for figur in self.geschlagen:
             """ die Wertigkeiten der Figuren auslesen """
             punkte += figur.wertung
-            pass
+        auswertung = f"{punkte} Punkte erhalten!"
+        text_item = self.canvas_spielfeld.create_text(self.COLUMNS * self.WIDTH // 2, self.ROWS * self.WIDTH // 2, text=auswertung, anchor="center", fill="#A76B46", font=("Arial", 50))
+        bbox = self.canvas_spielfeld.bbox(text_item)
+        rect_item = self.canvas_spielfeld.create_rectangle(bbox, fill="#F4EAE0", outline="#925B39")
+        self.canvas_spielfeld.tag_raise(text_item,rect_item)
         print("Spielende!", punkte)
-        self.back_button = tk.Button(self, text="Zurück zum Menü", command=self.return_callback)
-        self.back_button.grid(row=3)
-        pass
+        self.continue_button.grid_remove()
     
     def zeichne_brett(self):
-        farben = ["#EEEED2", "#769656"]
+        farben = ["#CAA48C", "#925B39"]
         for reihe in range(self.ROWS):
             for spalte in range(self.COLUMNS):
                 x1 = spalte * self.WIDTH
@@ -150,21 +188,27 @@ class OriginalMirrorChess(tk.Frame):
                 y2 = y1 + self.WIDTH
                 farbe = farben[(reihe + spalte) % 2]
                 self.canvas_spielfeld.create_rectangle(x1, y1, x2, y2, fill=farbe, outline="")
-        farben = ["#FFFFFF", "#C1D3AF"]
+        farben = ["#FFFFFF", "#F4EAE0"]
         for reihe in range(2):
+            if reihe == 1: outline="white"
+            else: outline=""
             for spalte in range(self.COLUMNS):
                 x1 = spalte * self.WIDTH
                 y1 = (reihe + 2) * self.WIDTH
                 x2 = x1 + self.WIDTH
                 y2 = y1 + self.WIDTH
-                self.canvas_spielfeld.create_rectangle(x1, y1, x2, y2, fill=farbe, outline="")
+                self.canvas_spielfeld.create_rectangle(x1, y1, x2, y2, fill=farben[reihe], outline=outline)
+        self.canvas_spielfeld.create_text(16 * self.WIDTH // 2, 2 * self.WIDTH + self.WIDTH // 2, text="Eigene Figuren", anchor="center", fill="#925B39", font=("Arial", 20))
+        self.canvas_spielfeld.create_rectangle(0, 0, self.COLUMNS*self.WIDTH, self.ROWS*self.WIDTH-2, fill="", outline="#925B39")
 
     def setze_startfiguren(self):
         # wird aktuell nur für das Ziehen aus der Ablage genutzt
         for i in range(len(self.figuren_spieler)):
             self.setze_figur(i, 3, self.figuren_spieler[i], "Ablage")
 
-    def setze_figur(self, x, y, figur, ursprung="Spielfeld"):
+    def setze_figur(self, x, y, figur, ursprung = None):
+        # wird aktuell nur für das Setzen aus der Ablage und das des PCs genutzt)
+        if ursprung is None: ursprung = "Spielfeld"
         pixel_x = x * self.WIDTH + self.WIDTH // 2
         pixel_y = y * self.WIDTH + self.WIDTH // 2
         symbol = figur.symbol
@@ -199,7 +243,7 @@ class OriginalMirrorChess(tk.Frame):
         # Hier Bedingung einfügen: Wenn man gerade selbst nicht dran ist, nichts tun
         x = event.x // self.WIDTH
         y = event.y // self.WIDTH
-        # print(event.x, event.y)
+        #print(event.x, event.y)
         if 0 <= x < self.COLUMNS and y == 3 and self.ablage[x] and self.spielphase == self.SPIELER_SETZEN:
             # Koordinaten valide, Feld enthält Figur, Spieler ist dran mit Ziehen
             ablagenfigur = self.ablage[x]
@@ -251,6 +295,7 @@ class OriginalMirrorChess(tk.Frame):
             self.ausgewaehlte_figur.update_coords(neue_x, neue_y)
             self.spielfeld[neue_y][neue_x] = self.ausgewaehlte_figur
             self.spielphase += 1
+            self.turn_to_active(self.continue_button)
             # neue Position zentrieren
             zentriert_x = neue_x * self.WIDTH + self.WIDTH // 2
             zentriert_y = neue_y * self.WIDTH + self.WIDTH // 2
@@ -281,16 +326,16 @@ class OriginalMirrorChess(tk.Frame):
         self.ausgewaehlte_figur = None
 
 
-class GameSelector(tk.Frame):
+class GameSelector(ttk.Frame):
     def __init__(self, master, start_game_callback):
         super().__init__(master)
         self.grid(row=0, column=0, sticky="nsew")
 
-        label = tk.Label(self, text="Choose a Game", font=("Arial", 20))
-        label.grid(row=0, column=0, pady=20)
+        label = ttk.Label(self, text="Wähle ein Spiel aus", font=("Arial", 20))
+        label.grid(row=0, column=0, pady=10, padx=10)
 
-        chess_btn = tk.Button(self, text="Play Original Mirror Chess", command=lambda: start_game_callback("chess"))
-        chess_btn.grid(row=1, column=0, pady=5)
+        chess_btn = ttk.Button(self, text="Spiele das originale Spiegelschach", command=lambda: start_game_callback("chess"))
+        chess_btn.grid(row=1, column=0, padx=10, pady=10)
 
         #dummy_btn = tk.Button(self, text="Play 3x16 Mirror Chess", command=lambda: start_game_callback("dummy"))
         #dummy_btn.grid(row=2, column=0, pady=5)
@@ -299,7 +344,14 @@ class GameSelector(tk.Frame):
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Mirror Chess")
+        self.title("Spiegelschach")
+
+        self.style = ttk.Style()
+        self.style.colors.set("primary", "#925B39")
+        self.style.colors.set("secondary", "#572C12")
+        self.style.colors.set("selectfg", "#F4EAE0")
+        self.style.configure('TButton', font=('Arial', 15))
+
 
         # Ensure the window resizes nicely
         self.rowconfigure(0, weight=1)
@@ -322,6 +374,7 @@ class App(tk.Tk):
             self.current_screen = OriginalMirrorChess(self, self.show_game_selector)
         elif game_name == "dummy":
             self.current_screen = OriginalMirrorChess(self, self.show_game_selector)
+
 
 
 if __name__ == "__main__":
