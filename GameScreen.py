@@ -66,7 +66,8 @@ class OriginalMirrorChess(ttk.Frame):
         pass
     
     def turn_to_waiting(self, button):
-        if self.spielphase == self.PC: button.configure(text="Warten auf den Gegner...")
+        if self.spielphase == self.PC and self.aktuelle_spalte == self.COLUMNS: button.configure(text="Spiel abschließen")
+        elif self.spielphase == self.PC: button.configure(text="Warten auf den Gegner...")
         else: button.configure(text="Warten auf deinen Zug...")
         # ausgrauen
 
@@ -120,27 +121,24 @@ class OriginalMirrorChess(ttk.Frame):
                 alte_x = i % 16
                 alte_y = i // 16
                 if self.spielfeld[alte_y][alte_x] and self.spielfeld[alte_y][alte_x].spieler == self.SPIELER1:
-                    print("A")
                     schlagende_figur = self.spielfeld[alte_y][alte_x]
                     # jedes spielfeld durchgehen: steht hier eine weiße figur?
                     for j in range(9):
                         # jedes feld drumherum durchgehen: steht hier eine schwarze figur?
-                        neue_x = j % 3
-                        neue_y = j // 3
+                        neue_x = (j % 3) - 1 + alte_x
+                        neue_y = (j // 3) -1 + alte_y
                         print("x:", neue_x, "y:", neue_y)
                         if (neue_x < 0 or self.COLUMNS <= neue_x) or (neue_y < 0 or self.ROWS <= neue_y):
                             print("B")
                             # kein erlaubtes spielfeld
                             continue
                         if self.spielfeld[neue_y][neue_x] and self.spielfeld[neue_y][neue_x].spieler == self.SPIELER2:
-                            print("C")
                             zu_schlagende_figur = self.spielfeld[neue_y][neue_x]
                             #ist das ein valider zug? wenn ja, der liste hinzufügen
                             if self.capturing_validity(neue_x, neue_y, schlagende_figur):
                                 print("D")
                                 aktuelle_wertung = self.spielfeld[neue_y][neue_x].wertung
                                 if aktuelle_wertung > hoechste_wertung:
-                                    print("E")
                                     hoechste_wertung = aktuelle_wertung
                                     ergebnis["Schlagende"] = schlagende_figur
                                     ergebnis["Geschlagener"] = zu_schlagende_figur
