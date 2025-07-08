@@ -46,6 +46,7 @@ The game "Mirror Chess"
 - Ideas
   - 3x16 Mirror Chess
   - Chess Rogue-Like
+  - 2 Spieler Modus (lokal)
 
 
 
