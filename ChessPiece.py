@@ -17,7 +17,7 @@ def figuren_erstellen(spieler):
 
 class ChessPiece():
     def __init__(self, symbol:str, spieler:str, wertung:int=None):
-        if wertung is None: wertung = 1
+        if wertung == None: wertung = 1
         self.wertung = wertung # für die auswertung
         self.symbol = symbol # wie das Symbol aussieht
         self.spieler = spieler # obs zum PC oder spieler gehört

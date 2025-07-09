@@ -206,7 +206,7 @@ class OriginalMirrorChess(ttk.Frame):
 
     def setze_figur(self, x, y, figur, ursprung = None):
         # wird aktuell nur für das Setzen aus der Ablage und das des PCs genutzt)
-        if ursprung is None: ursprung = "Spielfeld"
+        if ursprung == None: ursprung = "Spielfeld"
         pixel_x = x * self.WIDTH + self.WIDTH // 2
         pixel_y = y * self.WIDTH + self.WIDTH // 2
         symbol = figur.symbol
