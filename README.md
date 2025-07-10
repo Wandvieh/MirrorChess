@@ -67,6 +67,7 @@ The game "Mirror Chess"
   - Chess Rogue-Like
   - 2 Spieler Modus (lokal)
 - player can choose different materials to place the pieces on (wood, metal, gravel, etc.)
+- host on a website?? not with python... :(
 
 
 
