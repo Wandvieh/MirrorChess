@@ -21,7 +21,11 @@ The game "Mirror Chess"
     - [x] place_piece
     - [x] pc_turn
     - [ ] pc_captures
-- [ ] Added an icon for the task bar, added more icon resolutions
+- [ ] QoL?
+  - [ ] Added an icon for the task bar, added more icon resolutions
+  - [ ] Sound effects when placing pieces
+- [ ] Bugs
+  - [ ] PC's Knight can't properly capture
 
 ## v1.1 - Making Quality of Life Improvements
 - [x] QoL Improvements
@@ -56,13 +60,13 @@ The game "Mirror Chess"
 - [x] PC-Schlagen
 - [x] Spieler-Schlagen
 
-# Game Modes
+# Ideas
 
-- Ideas
+- Game Modes
   - 3x16 Mirror Chess
   - Chess Rogue-Like
   - 2 Spieler Modus (lokal)
-
+- player can choose different materials to place the pieces on (wood, metal, gravel, etc.)
 
 
 
