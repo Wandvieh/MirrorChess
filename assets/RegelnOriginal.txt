@@ -2,7 +2,7 @@ Willkommen bei Spiegelschach!
 
 Dies hier ist die originale Variante. Das Spielfeld ist 2x16 Felder groß, und der PC fängt an. Nacheinander stellen Spieler und PC ihre Figuren aufs Feld.
 Nachdem eine Figur aufs Feld gestellt wurde, kann man mit ihr oder einer anderen Figur nach den normalen Schachregeln schlagen, allerdings nur jeweils ein Feld weit (eine Ausnahme bildet der Springer, der normal schlägt).
-Figuren zu schlagen, gibt Punkte: 1 Punkt für den Bauern, 3 Punkte für Turm, Läufer oder Springer und 5 bzw. 6 Punkte für Dame bzw. König.
+Figuren zu schlagen, gibt Punkte: 1 Punkt für den Bauern, 3 Punkte für Turm, Läufer oder Springer und 5 bzw. 6 Punkte für Dame bzw. König. Eine Figur darf nur gezogen werden, wenn sie schlagen kann.
 Am Ende des Spiels wird die erreichte Punktzahl angezeigt.
 
 Der PC wird immer die letzte Figur des Spielers auf das Feld stellen. Der letzte Zug des Spielers ist immer ein Bauer

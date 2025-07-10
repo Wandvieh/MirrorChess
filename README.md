@@ -5,7 +5,22 @@ The game "Mirror Chess"
 
 ## v1.2 - Adding a new Game & Reworking the Code
 - [ ] Added new game?
-- [ ] Reworking the code (no changes, just cleaner code and smaller functions)
+  - [ ] Adding new versions by having new games inherit the base game class with the basic functions already built in
+- [ ] Refacturing the code (no changes, just cleaner code and smaller functions. Also making the functions work for other games too)
+  - [ ] Chess logic
+  - [ ] English comments and names for better reusability
+  - [ ] Functions
+    - [x] draw_board
+    - [x] draw_reserve
+    - [x] place_reserve
+    - [x] rule_popup
+    - [x] next_turn
+    - [x] turn_button_to_waiting
+    - [x] turn_button_to_active
+    - [x] can_capture
+    - [x] place_piece
+    - [x] pc_turn
+    - [ ] pc_captures
 - [ ] Added an icon for the task bar, added more icon resolutions
 
 ## v1.1 - Making Quality of Life Improvements
