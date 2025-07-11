@@ -1,0 +1,5 @@
+alabaster_chessboard: https://freesound.org/people/mh2o/sounds/351518/
+
+general_chess_sounds: https://freesound.org/people/Sunejackie/sounds/542394/
+
+glass_chessboard: https://freesound.org/people/Nomfundo_k/sounds/408542/

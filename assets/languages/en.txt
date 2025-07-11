@@ -1,0 +1,36 @@
+Mirror Chess
+-
+Choose a Game
+-
+Play the original Mirror Chess
+-
+Play the 3x16 Mirror Chess
+-
+Your Pieces
+-
+Start the Game
+-
+Waiting for your opponent...
+-
+Waiting for your move...
+-
+Next round
+-
+Finish the Game
+-
+← Back to the Menu
+-
+Rules
+-
+Welcome to mirror chess!
+
+This is the original version. The playing field is 2x16 squares and the PC starts. Player and PC place their pieces on the board one after the other.
+After a piece has been placed in a field, you can capture with it or another piece according to the normal chess rules, but only directly adjacent pieces (vertical, horizontal or diagonal) (with the exception of the knight, which captures normally).
+Capturing pieces scores points: 1 point for the pawn, 3 points for the rook, bishop or knight and 5 respectively 6 points for the queen respectively king. A piece may only be moved if it can capture.
+At the end of the game, the number of points scored is displayed.
+
+The PC will always place the player's last piece on the square. The player's last move must always be the pawn.
+
+Have fun!
+-
+ points received!

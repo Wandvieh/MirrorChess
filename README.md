@@ -3,13 +3,22 @@ The game "Mirror Chess"
 
 # To Do
 
+## v1.3 ?
+- [ ] 3x16 Mirror Chess
+  - [ ] Bugs?
+  - [ ] Create a better game?
+
 ## v1.2 - Adding a new Game & Reworking the Code
-- [ ] Added new game?
-  - [ ] Adding new versions by having new games inherit the base game class with the basic functions already built in
-- [ ] Refacturing the code (no changes, just cleaner code and smaller functions. Also making the functions work for other games too)
-  - [ ] Chess logic
-  - [ ] English comments and names for better reusability
-  - [ ] Functions
+- [x] Added new game: 3x16 (using parent/child classes)
+  - [x] board setup
+  - [x] PC and Player can set their pieces onto any field on their side they haven't put a piece on before
+  - [x] no limitations in regards to the capturing distance (needs more testing)
+- [x] Refacturing the code (no changes, just cleaner code and smaller functions. Also making the functions work for other games too)
+  - [x] reduced redundancies in checking valid moves
+  - [x] English comments and names for better reusability
+  - [x] Functions
+    - [x] __init__
+    - [x] set_attributes
     - [x] draw_board
     - [x] draw_reserve
     - [x] place_reserve
@@ -17,15 +26,21 @@ The game "Mirror Chess"
     - [x] next_turn
     - [x] turn_button_to_waiting
     - [x] turn_button_to_active
-    - [x] can_capture
-    - [x] place_piece
     - [x] pc_turn
-    - [ ] pc_captures
-- [ ] QoL?
+    - [x] pc_captures
+    - [x] end_game
+    - [x] place_piece
+    - [x] can_capture
+    - [x] on_mouse_press
+    - [x] on_mouse_drag
+    - [x] on_mouse_release
+- [ ] QoL? Nicer gaming experience
   - [ ] Added an icon for the task bar, added more icon resolutions
-  - [ ] Sound effects when placing pieces
-- [ ] Bugs
-  - [ ] PC's Knight can't properly capture
+  - [x] Sound effects when placing pieces
+  - [x] Added German and English Language options
+- [x] Bugs
+  - [x] PC's Knight can't properly capture
+  - [x] Pieces are now actually unmovable after having captured with them once
 
 ## v1.1 - Making Quality of Life Improvements
 - [x] QoL Improvements
@@ -67,7 +82,7 @@ The game "Mirror Chess"
   - Chess Rogue-Like
   - 2 Spieler Modus (lokal)
 - player can choose different materials to place the pieces on (wood, metal, gravel, etc.)
-- host on a website?? not with python... :(
+- host on a website?? not with python... :( (what about this: https://pyscript.net/ ?)
 
 
 

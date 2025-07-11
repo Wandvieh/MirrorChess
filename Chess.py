@@ -1,6 +1,6 @@
 import tkinter as tk
-PLAYER1 = "PC"
-PLAYER2 = "Spieler"
+PLAYER1 = "pc"
+PLAYER2 = "player"
 
 
 def create_player(player):
@@ -27,9 +27,9 @@ class ChessPiece():
         self.movable = True # if it has been moved this round
         self.coords = {} # where the piece is on the field; empty if it is not on the field
 
-        if player == "PC":
+        if player == "pc":
             self.color = "#FFFFFF"
-        else:
+        elif player == "player":
             self.color = "#000000"
 
         self.id = None
@@ -50,7 +50,7 @@ class ChessPiece():
     def get_possible_capture_moves(self) -> list:
         return []
     
-def can_move(capturing_piece:ChessPiece, new_x:int, new_y:int) -> bool:
+def can_move_limited(capturing_piece:ChessPiece, new_x:int, new_y:int) -> bool:
     if capturing_piece.symbol == "♟":
         if capturing_piece.player == PLAYER1:
             # Player1 is always starting at the top
@@ -71,11 +71,82 @@ def can_move(capturing_piece:ChessPiece, new_x:int, new_y:int) -> bool:
             return True
     return False
 
+def can_move(capturing_piece:ChessPiece, new_x:int, new_y:int, board:list[list[ChessPiece]]) -> bool:
+    if capturing_piece.symbol == "♟":
+        if capturing_piece.player == PLAYER1:
+            # Player1 is always starting at the top
+            if new_y == capturing_piece.coords["y"]+1 and (new_x == capturing_piece.coords["x"]-1 or new_x == capturing_piece.coords["x"]+1):
+                return True
+        if capturing_piece.player == PLAYER2:
+            # Player2 is always starting at the bottom
+            if new_y == capturing_piece.coords["y"]-1 and (new_x == capturing_piece.coords["x"]-1 or new_x == capturing_piece.coords["x"]+1):
+                return True
+    elif capturing_piece.symbol == "♞":
+        if ((new_x == capturing_piece.coords["x"]-2 or new_x == capturing_piece.coords["x"]+2) and (new_y == capturing_piece.coords["y"]-1 or new_y == capturing_piece.coords["y"]+1)) or ((new_y == capturing_piece.coords["y"]-2 or new_y == capturing_piece.coords["y"]+2) and (new_x == capturing_piece.coords["x"]-1 or new_x == capturing_piece.coords["x"]+1)):
+            return True
+    elif capturing_piece.symbol == "♚":
+        if ((new_x == capturing_piece.coords["x"]-1 or new_x == capturing_piece.coords["x"]+1) and new_y == capturing_piece.coords["y"]) or (new_x == capturing_piece.coords["x"] and (new_y == capturing_piece.coords["y"]-1 or new_y == capturing_piece.coords["y"]+1)):
+            return True
+        elif (new_x == capturing_piece.coords["x"]-1 or new_x == capturing_piece.coords["x"]+1) and (new_y == capturing_piece.coords["y"]-1 or new_y == capturing_piece.coords["y"]+1):
+            return True
+    elif capturing_piece.symbol == "♜" or capturing_piece.symbol == "♛":
+        if capturing_piece.coords["y"] == new_y:
+            # checking if the new coords are on its line of movement
+            # then checking if there is no piece in between
+            if new_x > capturing_piece.coords["x"]:
+                for i in range(capturing_piece.coords["x"]+1, new_x):
+                    if board[new_y][i]: return False
+                return True
+            elif new_x < capturing_piece.coords["x"]:
+                for i in range(new_x+1, capturing_piece.coords["x"]):
+                    if board[new_y][i]: return False
+                return True
+        elif capturing_piece.coords["x"] == new_x:
+            # checking if the new coords are on its line of movement
+            # then checking if there is no piece in between
+            if new_y > capturing_piece.coords["y"]:
+                for i in range(capturing_piece.coords["y"]+1, new_y):
+                    if board[i][new_x]: return False
+                return True
+            elif new_y < capturing_piece.coords["y"]:
+                for i in range(new_y+1, capturing_piece.coords["y"]):
+                    if board[i][new_x]: return False
+                return True
+    if capturing_piece.symbol == "♝" or capturing_piece.symbol == "♛":
+        if capturing_piece.coords["x"] - capturing_piece.coords["y"] == new_x - new_y:
+            # checking if the new coords are on its line of movement
+            # then checking if there is no piece in between
+            difference = new_x - new_y
+            if new_x < capturing_piece.coords["x"]:
+                for i in range(new_x+1, capturing_piece.coords["x"]):
+                    if board[i-difference][i]: return False
+                return True
+            elif new_x > capturing_piece.coords["x"]:
+                for i in range(capturing_piece.coords["x"]+1, new_x):
+                    if board[i-difference][i]: return False
+                return True
+        elif capturing_piece.coords["x"] + capturing_piece.coords["y"] == new_x + new_y:
+            # checking if the new coords are on its line of movement
+            # then checking if there is no piece in between
+            sum = new_x + new_y
+            if new_x < capturing_piece.coords["x"]:
+                for i in range(new_x+1, capturing_piece.coords["x"]):
+                    if board[sum-i][i]: return False
+                return True
+            elif new_x > capturing_piece.coords["x"]:
+                for i in range(capturing_piece.coords["x"]+1, new_x):
+                    if board[sum-i][i]: return False
+                return True
+    return False
+
 
 
 if __name__ == '__main__':
-    PLAYER1 = "PC"
-    PLAYER2 = "Spieler"
-    canvas_spielfeld = tk.Canvas(width=16*30, height=(2 + 2)*30, bg="white")
-    print(canvas_spielfeld.width)
+    piece = ChessPiece("♜", "pc", 3)
+    piece.update_coords(3,3)
+    board = [[None for _ in range(7)] for _ in range(7)]
+    board[0][2] = piece
+    board[2][2] = ChessPiece("♝", "pc", 3)
+    board[3][2] = ChessPiece("♝", "pc", 3)
+    print(can_move(piece, 2,3, board))
 
