@@ -1,5 +1,5 @@
 # MirrorChess
-The game "Mirror Chess"
+A chess variant
 
 # To Do
 
