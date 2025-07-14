@@ -6,7 +6,10 @@ A chess variant
 ## v1.3 ?
 - [ ] 3x16 Mirror Chess
   - [ ] Bugs?
-  - [ ] Create a better game?
+  - [ ] Improving the Gameplay
+  - [ ] Adding Rules
+- [ ] Feel
+  - [ ] Yet more Icon Sizes
 
 ## v1.2 - Adding a new Game & Reworking the Code
 - [x] Added new game: 3x16 (using parent/child classes)
@@ -34,8 +37,8 @@ A chess variant
     - [x] on_mouse_press
     - [x] on_mouse_drag
     - [x] on_mouse_release
-- [ ] QoL? Nicer gaming experience
-  - [ ] Added an icon for the task bar, added more icon resolutions
+- [x] QoL? Nicer gaming experience
+  - [x] added more icon resolutions
   - [x] Sound effects when placing pieces
   - [x] Added German and English Language options
 - [x] Bugs
