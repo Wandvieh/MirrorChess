@@ -4,6 +4,7 @@ from Chess import create_player, can_move_limited, can_move, ChessPiece
 import time
 import random
 import pygame
+import os
 
 
 class MirrorChess(ttk.Frame):
@@ -18,7 +19,7 @@ class MirrorChess(ttk.Frame):
         self.drag_item = None # das Textobjekt
 
         pygame.mixer.init()
-        self.place_sound = pygame.mixer.Sound("assets\\sounds\\general_chess_sounds_1.wav")
+        self.place_sound = pygame.mixer.Sound(os.path.join("assets","sounds","general_chess_sounds_1.wav"))
 
         self.set_attributes()
 
@@ -708,7 +709,7 @@ class App(tk.Tk):
         """
         Updates the language
         """
-        with open("assets\\languages\\" + language + ".txt", encoding="utf-8") as f:
+        with open(os.path.join("assets","languages", language + ".txt"), encoding="utf-8") as f:
             self.language_texts = f.read().split("\n-\n")
         self.title(self.language_texts[0])
         self.show_game_selector()
