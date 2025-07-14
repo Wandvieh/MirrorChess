@@ -8,6 +8,8 @@ A chess variant
   - [ ] Bugs?
   - [ ] Improving the Gameplay
   - [ ] Adding Rules
+- [ ] Original Mirror Chess
+  - [ ] Adding rule that you can only place on one field once
 - [ ] Feel
   - [ ] Yet more Icon Sizes
 
